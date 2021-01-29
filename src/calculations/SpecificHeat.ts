@@ -8,14 +8,14 @@ interface heatValues {
 class transitionTemps {
     melting:number;
     boiling:number;
-    ionizing:number|null // hmm will i ever use this
-    constructor(temps:{melting:number, boiling:number, ionizing:number|null}) {
+    //ionizing:number|null // hmm will i ever use this
+    constructor(temps:{melting:number, boiling:number}) {
         this.melting =  temps.melting;
         this.boiling = temps.boiling;
-        this.ionizing = temps.ionizing || null; // ionization temperature is never 0, nothing is plasma at room temperature
+        //this.ionizing = temps.ionizing || null; // ionization temperature is never 0, nothing is plasma at room temperature
     }
     getTemps():Array<number> {
-        return [this.melting,this.boiling]
+        return [this.melting, this.melting, this.boiling, this.boiling]
     }
 }
 
@@ -32,8 +32,7 @@ class MissingInformationError extends Error {
     }
 }
 
-
-export function energyRequired(
+function energyRequired(
     startTemp:number,
     endTemp: number,
     grams:number,
@@ -51,14 +50,6 @@ export function energyRequired(
 
 
     // insert all the temperatures into one array
-    let tmps : Array<number>  = states.getTemps();
-    tmps.push(startTemp, endTemp);
-    // sort it!
-    tmps.sort();
-    const startIndex = tmps.indexOf(startTemp);
-    const endIndex = tmps.indexOf(endTemp);
-    // chop off the ends
-    let temps = tmps.slice(startIndex,endIndex+1);
     let dir;
     if (startTemp < endTemp){
         // temperature going up
@@ -70,6 +61,18 @@ export function energyRequired(
         //i ❤️ javascript for this reason
         [startTemp,endTemp] = [endTemp,startTemp];
     }
+    let tmps : Array<number>  = states.getTemps();
+    tmps.push(startTemp, endTemp);
+    // sort it!
+    tmps.sort();
+    const startIndex = tmps.indexOf(startTemp);
+    const endIndex = tmps.indexOf(endTemp);
+    // chop off the ends
+    let temps = tmps.slice(startIndex,endIndex+1);
+
+    // ok....
+
+    //console.log(temps);
     function traverseTemps(temps: Array<number>):number{
         // so we check if the second temp is our ending temperature is the second element. if it is, then we need to find out what phase we're in
         if (temps[1]===endTemp){
@@ -90,7 +93,7 @@ export function energyRequired(
                 if (!specificHeat.gas) throw new MissingInformationError('Specific heat missing for gas state');
                 c =  specificHeat.gas;
             }
-
+            //console.log(`Calculating ${c} x ${grams} x ${temps[1]-temps[0]}`)
             return c*grams*(temps[1]-temps[0]);
 
         }
@@ -98,7 +101,7 @@ export function energyRequired(
             // recursive process
             // find the first segment
             // is the first one the start temp, if not, we need to use a different equation
-            if (temps[0]===startTemp){
+            if (temps[0]!==temps[1]){
                 let c:number;
                 if (temps[1]===states.melting){
                     // use the solid
@@ -115,6 +118,7 @@ export function energyRequired(
                     if (!specificHeat.gas) throw new MissingInformationError('Specific heat missing for gas state');
                     c =  specificHeat.gas;
                 }
+                //console.log(`Calculating ${c} x ${grams} x ${temps[1]-temps[0]}`)
                 return c*grams*(temps[1]-temps[0]) + traverseTemps(temps.slice(1));
 
             }
@@ -128,22 +132,48 @@ export function energyRequired(
 
                 // find out what the first one is
                 let c:number;
+                let c2:number;
                 if (temps[0]===states.melting){
                     if (!specificHeat.fusion) throw new MissingInformationError('Specific heat missing for fusion transition');
                     c =  specificHeat.fusion;
+                    // so we're going from liquid to gas, then [melting, boiling]
                 }
                 else {
+                    // are we ever going to come here?
+                    //
                     if (!specificHeat.vaporization) throw new MissingInformationError('Specific heat missing for vaporization transition');
                     c =  specificHeat.vaporization;
                 }
                 // uhh mass divided by molar mass times c?
-                return c*grams/molarMass + traverseTemps(temps.slice(1));
+                // kJ to J
+                //console.log(`Calculating ${c} x 1000 x ${grams} / ${molarMass}`)
+                return c*1000*grams/molarMass  + traverseTemps(temps.slice(1));
             }
         }
     }
 
 
-
     return dir * traverseTemps(temps);
 
+}
+
+export {energyRequired}
+
+if (require.main === module) {
+    // testing
+    console.log('================================\n')
+    console.log(energyRequired(
+        140,
+        -30,
+        36.04,
+        new transitionTemps({melting:0,boiling:100}),
+        {
+            solid:2.06,
+            fusion:6.01,
+            liquid:4.18,
+            vaporization:40.7,
+            gas:1.87
+        },
+        18.02
+    ))
 }
