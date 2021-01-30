@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/chemistry/static/css/main.bfe0e9b5.chunk.css",
-    "main.js": "/chemistry/static/js/main.1820c6e1.chunk.js",
-    "main.js.map": "/chemistry/static/js/main.1820c6e1.chunk.js.map",
+    "main.js": "/chemistry/static/js/main.eceacdb0.chunk.js",
+    "main.js.map": "/chemistry/static/js/main.eceacdb0.chunk.js.map",
     "runtime-main.js": "/chemistry/static/js/runtime-main.31d6d528.js",
     "runtime-main.js.map": "/chemistry/static/js/runtime-main.31d6d528.js.map",
     "static/css/2.7afb6aac.chunk.css": "/chemistry/static/css/2.7afb6aac.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.7afb6aac.chunk.css",
     "static/js/2.7c13fe4d.chunk.js",
     "static/css/main.bfe0e9b5.chunk.css",
-    "static/js/main.1820c6e1.chunk.js"
+    "static/js/main.eceacdb0.chunk.js"
   ]
 }
