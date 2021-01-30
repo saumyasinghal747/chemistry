@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/chemistry/static/css/main.bfe0e9b5.chunk.css",
-    "main.js": "/chemistry/static/js/main.d7eacde3.chunk.js",
-    "main.js.map": "/chemistry/static/js/main.d7eacde3.chunk.js.map",
+    "main.js": "/chemistry/static/js/main.0055fca4.chunk.js",
+    "main.js.map": "/chemistry/static/js/main.0055fca4.chunk.js.map",
     "runtime-main.js": "/chemistry/static/js/runtime-main.4aada920.js",
     "runtime-main.js.map": "/chemistry/static/js/runtime-main.4aada920.js.map",
     "static/css/2.7afb6aac.chunk.css": "/chemistry/static/css/2.7afb6aac.chunk.css",
-    "static/js/2.20267bff.chunk.js": "/chemistry/static/js/2.20267bff.chunk.js",
-    "static/js/2.20267bff.chunk.js.map": "/chemistry/static/js/2.20267bff.chunk.js.map",
+    "static/js/2.975838a1.chunk.js": "/chemistry/static/js/2.975838a1.chunk.js",
+    "static/js/2.975838a1.chunk.js.map": "/chemistry/static/js/2.975838a1.chunk.js.map",
     "static/js/3.fd93fafe.chunk.js": "/chemistry/static/js/3.fd93fafe.chunk.js",
     "static/js/3.fd93fafe.chunk.js.map": "/chemistry/static/js/3.fd93fafe.chunk.js.map",
     "index.html": "/chemistry/index.html",
     "static/css/2.7afb6aac.chunk.css.map": "/chemistry/static/css/2.7afb6aac.chunk.css.map",
     "static/css/main.bfe0e9b5.chunk.css.map": "/chemistry/static/css/main.bfe0e9b5.chunk.css.map",
-    "static/js/2.20267bff.chunk.js.LICENSE.txt": "/chemistry/static/js/2.20267bff.chunk.js.LICENSE.txt"
+    "static/js/2.975838a1.chunk.js.LICENSE.txt": "/chemistry/static/js/2.975838a1.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.4aada920.js",
     "static/css/2.7afb6aac.chunk.css",
-    "static/js/2.20267bff.chunk.js",
+    "static/js/2.975838a1.chunk.js",
     "static/css/main.bfe0e9b5.chunk.css",
-    "static/js/main.d7eacde3.chunk.js"
+    "static/js/main.0055fca4.chunk.js"
   ]
 }
