@@ -1,36 +1,5 @@
-interface heatValues {
-    solid:number|null,
-    fusion:number|null,
-    liquid:number|null,
-    vaporization:number|null,
-    gas:number|null
-}
-class transitionTemps {
-    melting:number;
-    boiling:number;
-    //ionizing:number|null // hmm will i ever use this
-    constructor(temps:{melting:number, boiling:number}) {
-        this.melting =  temps.melting;
-        this.boiling = temps.boiling;
-        //this.ionizing = temps.ionizing || null; // ionization temperature is never 0, nothing is plasma at room temperature
-    }
-    getTemps():Array<number> {
-        return [this.melting, this.melting, this.boiling, this.boiling]
-    }
-}
+import {heatValues, MissingInformationError, transitionTemps} from "./Definitions";
 
-
-class MissingInformationError extends Error {
-    constructor(...params: any[]) {
-        super(...params);
-        // Maintains proper stack trace for where our error was thrown (only available on V8)
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, MissingInformationError)
-        }
-
-        this.name = 'MissingInformationError'
-    }
-}
 
 function energyRequired(
     startTemp:number,
@@ -38,7 +7,7 @@ function energyRequired(
     grams:number,
     states:transitionTemps,
     specificHeat:heatValues,
-    molarMass:number|null) : number {
+    molarMass:number|null) : { energy?:number, error?:string } {
 
     // so we have all the information that we need. Now we need a bunch of if statements.
     // can we do this efficiently?
@@ -46,7 +15,7 @@ function energyRequired(
     // So insert the two temperatures into an array along with the melting and boiling temperatures, then
     // find the index of the starting and ending, chop off the ends, start the calculations
 
-    if (startTemp===endTemp) return 0; //no energy needed to do nothing, don't waste computation
+    if (startTemp===endTemp) return {energy:0}; //no energy needed to do nothing, don't waste computation
 
 
     // insert all the temperatures into one array
@@ -132,7 +101,6 @@ function energyRequired(
 
                 // find out what the first one is
                 let c:number;
-                let c2:number;
                 if (temps[0]===states.melting){
                     if (!specificHeat.fusion) throw new MissingInformationError('Specific heat missing for fusion transition');
                     c =  specificHeat.fusion;
@@ -152,8 +120,15 @@ function energyRequired(
         }
     }
 
+    try {
+        return {energy: dir * traverseTemps(temps)};
+    }
+    catch (e:any){
+        return {
+            error:e.message
+        }
+    }
 
-    return dir * traverseTemps(temps);
 
 }
 
